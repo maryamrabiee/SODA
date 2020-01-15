@@ -1,16 +1,16 @@
 # SODA (Species bOundry Delimitation using Astral)
--
+
 SODA is a tool for species delimitation using only gene tree topologies. It's a fast way of doing species delimitation and mostly finding population boundaries within individuals. It uses the polytomy test developed by [Sayyari et. al ](https://www.mdpi.com/2073-4425/9/3/132/htm) implemented inside ASTRAL package.
 
 - You can find the details of the algorithm and benchmarks in the following paper:
 
 	* Rabiee, Maryam, and Siavash Mirarab. “SODA: Multi-Locus Species Delimitation Using Quartet Frequencies.” BioRxiv, 2019, 869396. doi:10.1101/869396.
 
-#INSTALLATION:
--
+# INSTALLATION:
+
 For running ASTRAL you only need to have Java installed, however, SODA is written in Python and it uses Dendropy package which is easy to install with ***pip***. You can find installation instructions [here](https://dendropy.org).
 
-#EXECUTION:
+# EXECUTION:
 For running soda you need your gene trees in newick format in one file and your guide tree in another file. If you haven't obtained the guide tree, you can easily run ASTRAL and estimate the species tree.
 
 ```
@@ -31,7 +31,7 @@ If you don't, SODA can take care of it. You can use the *delimit-gts.sh* script.
 ./delimit-gts.sh [Gene Tree File] [Guide Tree File] [Output Name] [Out directory] [ASTRAL jar file]
 ```
 
-##Interpreting the output
+## Interpreting the output
 
 The output of SODA is name of the individuals and a corresponding number. Individuals that have the same number assigned are in the same group and comprise a distinct species than individuals with other numbers.
 Sample output is:
