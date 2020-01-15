@@ -89,7 +89,7 @@ if "__main__" == __name__:
 	    schema='newick',
 	    rooting='force-rooted')
 
-	if len(sys.argv)==3:
+	if len(sys.argv)==4:
 		cutoff = float(sys.argv[3])
 
 	else:
