@@ -88,9 +88,22 @@ if "__main__" == __name__:
 	    file=open(fname, "r"),
 	    schema='newick',
 	    rooting='force-rooted')
-	cutoff = float(sys.argv[3])
-	e = find_root(mle,cutoff)
-	new_root = mle.reroot_at_edge(e)
+
+	if len(sys.argv)==3:
+		cutoff = float(sys.argv[3])
+
+	else:
+		cutoff = 0.05
+
+
+	
+#	if root != "unrooted":
+#		e = find_root(mle,cutoff)
+#		new_root = mle.reroot_at_edge(e)
+#	elif root != "rooted"
+#		print("The guide must be either rooted or unrooted")
+#		exit()
+		
 	print(mle.as_string(schema="newick"))
 	for i in mle.postorder_node_iter():
 		i.state = 'N'
