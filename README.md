@@ -11,24 +11,22 @@ SODA is a tool for species delimitation using only gene tree topologies. It's a 
 For running ASTRAL you only need to have Java installed, however, SODA is written in Python and it uses Dendropy package which is easy to install with ***pip***. You can find installation instructions [here](https://dendropy.org).
 
 # EXECUTION:
-For running soda you need your gene trees in newick format in one file and your guide tree in another file. If you haven't obtained the guide tree, you can easily run ASTRAL and estimate the species tree.
+For running soda you need your gene trees in newick format in one file and your guide tree in another file. If you haven't obtained the guide tree, SODA does it for you.
 
-```
-java -jar __ASTRAL_jarfile__  -i <genetrees.tre> -o <guidetree.tree>
-```
+If you know the correct rooting of the species tree, use that to reroot the guide tree and specify it with "rooted" option so that SODA does not run its rerooting algorithm.
 
-
-If you know the correct rooting of the species tree, use that to reroot the species tree. Then you can easily run SODA:
-
-```
-python3 species_delimitation.py <guidetree.tree> <output.cl> [cut-off]
-```
 The cut off value is optional, by default it has been set to 0.05. It can be changed and it will affect the number of species. Check out the experiments in the [paper](https://www.biorxiv.org/content/10.1101/869396v1.abstract).
 
-If you don't know the root, SODA can take care of it. You can use the *delimit-gts.sh* script.
+For running SODA, with minimum requirements. you should run following command:
 
 ```
-./delimit-gts.sh [Gene Tree File] [Guide Tree File] [Output Name] [Out directory] [ASTRAL jar file]
+python3 run_delimitation.py -i [Gene Tree File] -d [Out directory] -o [Output Name]  
+```
+
+You can see the list of options by running:
+
+```
+python3 run_delimitation.py 
 ```
 
 ## Interpreting the output
