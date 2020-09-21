@@ -1,7 +1,7 @@
 import dendropy
 import collections
 import sys
-
+import argparse
 
 
 
@@ -48,7 +48,8 @@ def find_clades(rt_node,cutoff):
 				add_clade(clades, children[1])
 				for nd in children[1].postorder_iter():
 					nd.state = 'P'
-				c2.state = 'P'				
+				c2.state = 'P'
+				c2.mark = 'T'				
 
 			if children[1].state == 'P' and children[0].state == 'N':
 
@@ -56,10 +57,12 @@ def find_clades(rt_node,cutoff):
 				for nd in children[0].postorder_iter():
 					nd.state = 'P'
 				
-				c1.state = 'P'				
+				c1.state = 'P'	
+				c1.mark = 'T'			
 
 			if children[0].state == 'P' and children[1].state == 'P':
 				node.state = 'P'
+				node.mark = 'T'
 
 		if node.state != 'P' and node.parent_node and node.label:
 				
@@ -68,10 +71,20 @@ def find_clades(rt_node,cutoff):
 					for nd in node.postorder_iter():
 						nd.state= 'P'
 					node.state = 'P'
+					node.mark = 'T'
+
 		# print_node(node)
 					
 	return clades
 
+
+def print_extended_sp(tree):
+	tre = tree.clone()
+	for node in tre.postorder_node_iter():
+		if node.mark != 'T' and node.edge.is_internal():
+			node.edge.collapse()
+			print("collapse")
+	print(tre.as_string(schema="newick"))
 
 def find_root(rt_node, cutoff):
 	for node in rt_node.postorder_node_iter():	
@@ -80,38 +93,51 @@ def find_root(rt_node, cutoff):
 				if float(node.label) < cutoff :
 					return node.edge
 
-if "__main__" == __name__:
-	
-	fname = sys.argv[1]
-	out = sys.argv[2]
-	mle = dendropy.Tree.get(
-	    file=open(fname, "r"),
-	    schema='newick',
-	    rooting='force-rooted')
+#if "__main__" == __name__:
 
-	if len(sys.argv)==4:
-		cutoff = float(sys.argv[3])
+	# cutoff = 0.05
 
-	else:
-		cutoff = 0.05
+	# mle = dendropy.Tree.get(
+	#     file=open(args[""], "r"),
+	#     schema='newick',
+	#     rooting='force-rooted')
 
 
-	
-#	if root != "unrooted":
-#		e = find_root(mle,cutoff)
-#		new_root = mle.reroot_at_edge(e)
-#	elif root != "rooted"
-#		print("The guide must be either rooted or unrooted")
-#		exit()
 		
-	print(mle.as_string(schema="newick"))
-	for i in mle.postorder_node_iter():
-		i.state = 'N'
+	# print(mle.as_string(schema="newick"))
+	# for i in mle.postorder_node_iter():
+	# 	i.state = 'N'
+	# 	i.mark = 'F'
 
 
-	clades = find_clades(mle, cutoff)
-	f = open(out, "w")
+	# clades = find_clades(mle, cutoff)
+	# print_extended_sp(mle)
+	# f = open(out, "w")
 	
+	# for i,l in enumerate(clades):
+	# 	a = [node.taxon.label for node in l]
+	# 	counter = collections.Counter(a)
+	# 	# cluster = counter.most_common(1)[0][0]+"_"+str(i)
+	# 	cluster = counter.most_common(1)[0][0]
+	# 	for node in l:
+	# 		print(node.taxon.label.replace(" ", "_")+"\t" + cluster)
+	# 		f.write(node.taxon.label.replace(" ", "_")+"\t" + str(i) + "\n")
+	# 	print()
+
+	# # print(len(clades))
+	# mle.prune_leaves_without_taxa()
+	# #print(mle.as_string(schema="newick"))
+
+def run_delimitation(tree, out, cutoff):
+
+	for i in tree.postorder_node_iter():
+		i.state = 'N'
+		i.mark = 'F'
+
+	clades = find_clades(tree, cutoff)
+	print_extended_sp(tree)
+
+	f = open(out, "w")	
 	for i,l in enumerate(clades):
 		a = [node.taxon.label for node in l]
 		counter = collections.Counter(a)
@@ -122,7 +148,4 @@ if "__main__" == __name__:
 			f.write(node.taxon.label.replace(" ", "_")+"\t" + str(i) + "\n")
 		print()
 
-	# print(len(clades))
-	mle.prune_leaves_without_taxa()
-	#print(mle.as_string(schema="newick"))
-
+	tree.prune_leaves_without_taxa()
