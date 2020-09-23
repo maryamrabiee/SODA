@@ -15,19 +15,18 @@ SODA is a tool for species delimitation using only gene tree topologies. It's a 
 
 ## Steps:
 
-1. Download the code from this github page. 
-2. Unzipp the package if you downloaded the zip file.
+1. Clone the code from this github page or download [the zip file](https://github.com/maryamrabiee/SODA/archive/master.zip). 
+2. Unzip the package if you downloaded the zip file.
+3. `cd` into the directory where SODA code is placed. 
 
-No installation is required in the current versiion. 
+There is installation is required for the current version of SODA. 
 
 # EXECUTION:
-For running soda you need your gene trees in newick format in one file and your guide tree in another file. If you haven't obtained the guide tree, SODA does it for you.
+For running soda you need your gene trees in newick format in one file and your guide tree in another file. The guide tree is option. If you haven't obtained the guide tree, SODA uses ASTRAL to compute one.
 
-If you know the correct rooting of the species tree, use that to reroot the guide tree and specify it with "rooted" option so that SODA does not run its rerooting algorithm.
 
-The cut off value is optional, by default it has been set to 0.05. It can be changed and it will affect the number of species. Check out the experiments in the [paper](https://www.biorxiv.org/content/10.1101/869396v1.abstract).
 
-For running SODA, with minimum requirements. you should run following command:
+For running SODA, given only input gene trees, you should run following command:
 
 ```
 python3 run_delimitation.py -i [Gene Tree File] -d [Out directory] -o [Output Name]  
@@ -39,10 +38,17 @@ You can see the list of options by running:
 python3 run_delimitation.py 
 ```
 
+
+* If you know the correct rooting of the species tree, use the `-r` option ("rooted") so that SODA avoids  rerooting the tree.
+* The p-value cutoff value is optional (by default it has been set to 0.05) but can be changed and it will affect the number of species. Check out the experiments in the [paper](https://www.biorxiv.org/content/10.1101/869396v1.abstract).
+* Use `-a` option to tell SODA about the population groupings known *a priori*. SODA will not break these populations. 
+
+
 ## Interpreting the output
 
-The output of SODA is name of the individuals and a corresponding number. Individuals that have the same number assigned are in the same group and comprise a distinct species than individuals with other numbers.
-Sample output is:
+The output of SODA is the names of individuals and a corresponding number per each individual. Individuals that have the same number assigned to them are in the same group and comprise a distinct species.
+
+A Sample output would look like:
 
 ```
 P_min12908      0
@@ -58,6 +64,8 @@ P_v_vir379      3
 P_x_xant_1      3
 ...
 ```
-So here four different groups has been identified within these individuals.
+Here, four different species have been identified.
+
+In addition to the output file, inside the directory given using `-d`, SODA saves several files. These include the guide tree, before rooting, after rooting, and after annotation with p-values per each branch. 
 
 
