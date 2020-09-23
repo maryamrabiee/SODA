@@ -89,5 +89,5 @@ if "__main__" == __name__:
 	if not args["rooted"] or not args["guide tree"]:
 		tree = root_guide_tree(gene_trees_path, n, len(lines), out_dir+"astral.out", None , tree)
 	
-	run_delimitation(tree, args["output file"], args["cutoff"])
+	run_delimitation(tree, args["output file"], float(args["cutoff"]))
 
