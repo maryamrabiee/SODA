@@ -10,8 +10,8 @@ SODA is a tool for species delimitation using only gene tree topologies. It's a 
 
 ## Prerequisites
 
-* Java, versin ??
-* Dendropy, version > ?; Dendropy package which is easy to install with ***pip***. You can find installation instructions [here](https://dendropy.org).
+* Java, version 1.6 or later 
+* Dendropy, version > 4.0.0; Dendropy package which is easy to install with ***pip***. You can find installation instructions [here](https://dendropy.org).
 
 ## Steps:
 
