@@ -1,6 +1,6 @@
 # SODA (Species bOundry Delimitation using Astral)
 
-SODA is a tool for species delimitation using only gene tree topologies. It's a fast way of doing species delimitation and mostly finding population boundaries within individuals. It uses the polytomy test developed by [Sayyari et. al ](https://www.mdpi.com/2073-4425/9/3/132/htm) implemented inside ASTRAL package.
+SODA is a tool for species delimitation using only gene tree topologies. It's a fast way of doing species delimitation and relies on a polytomy test developed by [Sayyari et. al ](https://www.mdpi.com/2073-4425/9/3/132/htm) implemented inside ASTRAL package. SODA has been in our tests slightly less accurate than BPP but it is far faster.  
 
 - You can find the details of the algorithm and benchmarks in the following paper:
 
@@ -8,7 +8,17 @@ SODA is a tool for species delimitation using only gene tree topologies. It's a 
 
 # INSTALLATION:
 
-For running ASTRAL you only need to have Java installed, however, SODA is written in Python and it uses Dendropy package which is easy to install with ***pip***. You can find installation instructions [here](https://dendropy.org).
+## Prerequisites
+
+* Java, versin ??
+* Dendropy, version > ?; Dendropy package which is easy to install with ***pip***. You can find installation instructions [here](https://dendropy.org).
+
+## Steps:
+
+1. Download the code from this github page. 
+2. Unzipp the package if you downloaded the zip file.
+
+No installation is required in the current versiion. 
 
 # EXECUTION:
 For running soda you need your gene trees in newick format in one file and your guide tree in another file. If you haven't obtained the guide tree, SODA does it for you.
