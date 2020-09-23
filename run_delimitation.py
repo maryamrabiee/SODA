@@ -58,10 +58,10 @@ if "__main__" == __name__:
 	parser.add_argument("-i","--input gene trees",required=True,help="A newick file containing all the gene trees")
 	parser.add_argument("-o","--output file",required=True,help="Output file for the delimitation")
 	parser.add_argument("-d","--output directory",required=True,help="Output directory for the tree files")
-	parser.add_argument("-t","--guide tree",required=False,help="The guide tree to do delimitation on, if available")
-	parser.add_argument("-a","--mapping",required=False,help="The mapping file of individuals to species; each line has two columns, first is individual label and second is the population it belongs to")
-	parser.add_argument("-r","--rooted",required=False,action='store_true',help="Whether the guide tree is rooted or needs rerooting")
-	parser.add_argument("-c","--cutoff",required=False,default = cutoff, help="The mapping file of individuals to species; each line has two columns, first is individual label and second is the population it belongs to")
+	parser.add_argument("-t","--guide tree",required=False,help="The guide tree used for delimitation on [optional; by default, assumed to be not rooted; see -r]")
+	parser.add_argument("-a","--mapping",required=False,help="The mapping file of individuals to populations known apriori; each line has two columns, the first is the individual label and the second is the population it belongs to.")
+	parser.add_argument("-r","--rooted",required=False,action='store_true',help="Use this option if the guide tree is already rooted and does not need rerooting.")
+	parser.add_argument("-c","--cutoff",required=False,default = cutoff, help="The mapping file of individuals to species; each line has two columns, the first is the individual label and the second is the population it belongs to")
 	
 	if len(argv) == 1:
 		parser.print_help()
