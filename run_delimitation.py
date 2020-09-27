@@ -10,7 +10,7 @@ import re
 #__len__()
 def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 
-	bashCommand = "java -Xmx"+ str(100 * ceil(log(n * g, 10)* log(n, 10)))+"m -jar ./Astral/astral.5.7.3.jar -i "+gene_trees+" -o "+ out + " -t 10"
+	bashCommand = "java -Xmx"+ str(100 * ceil(log(n * g, 10)* log(n, 10)))+"m -jar ./Astral/astral.5.7.3.jar -i " + gene_trees + " -o "+ out + " -t 10"
 
 	if mapping:
 		bashCommand += " -a "+ mapping
@@ -29,7 +29,10 @@ def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 		#lines = error.split()
 		r1 = re.findall(r"\n\(\S*;\n",error.decode('utf-8'))
 		print(r1)
-		print("***return",r1[-1].strip())
+		if not r1:
+			print("Mapping file is inconsistent with gene tree labels")
+			exit(0)
+#		print("***return",r1[-1].strip())
 		return dendropy.Tree.get(data=r1[-1].strip(),schema='newick')
 
 
@@ -61,7 +64,7 @@ if "__main__" == __name__:
 	parser.add_argument("-t","--guide tree",required=False,help="The guide tree to do delimitation on, if available")
 	parser.add_argument("-a","--mapping",required=False,help="The mapping file of individuals to species; each line has two columns, first is individual label and second is the population it belongs to")
 	parser.add_argument("-r","--rooted",required=False,action='store_true',help="Whether the guide tree is rooted or needs rerooting")
-	parser.add_argument("-c","--cutoff",required=False,default = cutoff, help="The mapping file of individuals to species; each line has two columns, first is individual label and second is the population it belongs to")
+	parser.add_argument("-c","--cutoff",required=False,default = cutoff, help="The cutoff value for species delimitation, defalt is 0.05")
 	
 	if len(argv) == 1:
 		parser.print_help()
@@ -83,11 +86,11 @@ if "__main__" == __name__:
 	trees.read(path=gene_trees_path, schema='newick')
 	n = taxa.__len__()
 	print(n)
-	tree = run_astral(gene_trees_path, n, len(lines), out_dir+"astral.out", mapping ,guide_tree)
+	tree = run_astral(gene_trees_path, n, len(lines), out_dir+"/astral.out", mapping ,guide_tree)
 
 	print(tree.as_string(schema="newick"))
 	if not args["rooted"] or not args["guide tree"]:
-		tree = root_guide_tree(gene_trees_path, n, len(lines), out_dir+"astral.out", None , tree)
+		tree = root_guide_tree(gene_trees_path, n, len(lines), out_dir+"/astral.out", None , tree)
 	
 	run_delimitation(tree, args["output file"], float(args["cutoff"]))
 
