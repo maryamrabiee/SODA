@@ -43,6 +43,18 @@ python3 run_delimitation.py
 * The p-value cutoff value is optional (by default it has been set to 0.05) but can be changed and it will affect the number of species. Check out the experiments in the [paper](https://www.biorxiv.org/content/10.1101/869396v1.abstract).
 * Use `-a` option to tell SODA about the population groupings known *a priori*. SODA will not break these populations. 
 
+## Examples
+With the data given in the `samle_data` directory you can test SODA on your machine with following commands. To run SODA just with gene trees and a mapping of individuals to populations, you should set options as:
+
+```
+python3 run_delimitation.py  -i sample_data/all-gene-trees.tre.pruned -d output/ -o delim.cl  -a sample_data/mapping.txt   
+```
+The delimitation of the population can be found in the `delim.cl` file.
+To run SODA with a rooted guide tree and a specific cut off value you can run this command:
+
+```
+python3 run_delimitation.py -i sample_data/all-gene-trees.tre.pruned -d output/ -o delim.cl  -t sample_data/astral.out.rt -r
+```
 
 ## Interpreting the output
 
