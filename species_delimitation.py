@@ -78,13 +78,18 @@ def find_clades(rt_node,cutoff):
 	return clades
 
 
-def print_extended_sp(tree):
+def print_extended_sp(tree, output_extended, out_dir):
 	tre = tree.clone()
 	for node in tre.postorder_node_iter():
 		if node.mark != 'T' and node.edge.is_internal():
 			node.edge.collapse()
-			print("collapse")
+		#	print("collapse")
 	print(tre.as_string(schema="newick"))
+	if output_extended:
+		f = open(out_dir+"/astral.ext.tre", "w")
+		f.write(tre.as_string(schema="newick"))
+		f.close()
+
 
 def find_root(rt_node, cutoff):
 	for node in rt_node.postorder_node_iter():	
@@ -93,49 +98,14 @@ def find_root(rt_node, cutoff):
 				if float(node.label) < cutoff :
 					return node.edge
 
-#if "__main__" == __name__:
-
-	# cutoff = 0.05
-
-	# mle = dendropy.Tree.get(
-	#     file=open(args[""], "r"),
-	#     schema='newick',
-	#     rooting='force-rooted')
-
-
-		
-	# print(mle.as_string(schema="newick"))
-	# for i in mle.postorder_node_iter():
-	# 	i.state = 'N'
-	# 	i.mark = 'F'
-
-
-	# clades = find_clades(mle, cutoff)
-	# print_extended_sp(mle)
-	# f = open(out, "w")
-	
-	# for i,l in enumerate(clades):
-	# 	a = [node.taxon.label for node in l]
-	# 	counter = collections.Counter(a)
-	# 	# cluster = counter.most_common(1)[0][0]+"_"+str(i)
-	# 	cluster = counter.most_common(1)[0][0]
-	# 	for node in l:
-	# 		print(node.taxon.label.replace(" ", "_")+"\t" + cluster)
-	# 		f.write(node.taxon.label.replace(" ", "_")+"\t" + str(i) + "\n")
-	# 	print()
-
-	# # print(len(clades))
-	# mle.prune_leaves_without_taxa()
-	# #print(mle.as_string(schema="newick"))
-
-def run_delimitation(tree, out, cutoff):
+def run_delimitation(tree, out, cutoff, output_extended, out_dir):
 
 	for i in tree.postorder_node_iter():
 		i.state = 'N'
 		i.mark = 'F'
 
 	clades = find_clades(tree, cutoff)
-	print_extended_sp(tree)
+	print_extended_sp(tree, output_extended, out_dir)
 
 	f = open(out, "w")	
 	for i,l in enumerate(clades):
@@ -147,5 +117,5 @@ def run_delimitation(tree, out, cutoff):
 			print(node.taxon.label.replace(" ", "_")+"\t" + cluster)
 			f.write(node.taxon.label.replace(" ", "_")+"\t" + str(i) + "\n")
 		print()
-
+	f.close()
 	tree.prune_leaves_without_taxa()

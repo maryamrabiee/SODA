@@ -6,7 +6,9 @@ from species_delimitation import run_delimitation
 import dendropy
 import collections
 import re
+import os
 
+VERSION="1.0.1"
 #__len__()
 def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 
@@ -65,6 +67,7 @@ if "__main__" == __name__:
 	parser.add_argument("-a","--mapping",required=False,help="The mapping file of individuals to populations known apriori; each line has two columns, the first is the individual label and the second is the population it belongs to.")
 	parser.add_argument("-r","--rooted",required=False,action='store_true',help="Use this option if the guide tree is already rooted and does not need rerooting.")
 	parser.add_argument("-c","--cutoff",required=False,default = cutoff, help="The cutoff value for species delimitation, defalt is 0.05")
+	parser.add_argument("-e","--extended sp",required=False,action='store_true',help="If this option is set, the extended species tree will be outputed in the output directory with .ext.tre suffix")
 
 	
 	if len(argv) == 1:
@@ -72,11 +75,15 @@ if "__main__" == __name__:
 		exit(0)
 
 	args = vars(parser.parse_args())
+	print("Launching SODA" + VERSION) 
 
 	gene_trees_path =  args["input gene trees"]
 	out_dir = args["output directory"]
 	mapping = args["mapping"]
 	guide_tree = args["guide tree"]
+
+	if not os.path.exists(out_dir):
+		os.makedirs(out_dir)
 
 	with open(gene_trees_path) as f:
 		lines = f.readlines()
@@ -93,5 +100,5 @@ if "__main__" == __name__:
 	if not args["rooted"] or not args["guide tree"]:
 		tree = root_guide_tree(gene_trees_path, n, len(lines), out_dir+"/astral.out", None , tree)
 	
-	run_delimitation(tree, args["output file"], float(args["cutoff"]))
+	run_delimitation(tree, args["output file"], float(args["cutoff"]), args["extended sp"], out_dir)
 
