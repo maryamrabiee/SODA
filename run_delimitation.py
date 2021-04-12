@@ -7,12 +7,16 @@ import dendropy
 import collections
 import re
 import os
+import glob
 
-VERSION="1.0.1"
+VERSION="v1.0.1"
 #__len__()
 def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 
-	bashCommand = "java -Xmx"+ str(100 * ceil(log(n * g, 10)* log(n, 10)))+"m -jar ./Astral/astral.5.7.3.jar -i " + gene_trees + " -o "+ out + " -t 10"
+	list_of_files = glob.glob('./Astral/astral.*.jar') # * means all if need specific format then *.csv
+	latest_file = max(list_of_files, key=os.path.getctime)
+
+	bashCommand = "java -Xmx"+ str(100 * ceil(log(n * g, 10)* log(n, 10)))+"m -jar "+ latest_file +" -i " + gene_trees + " -o "+ out + " -t 10"
 
 	if mapping:
 		bashCommand += " -a "+ mapping
@@ -24,7 +28,7 @@ def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 
 	process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	output, error = process.communicate()
-
+	print(error)
 	print("==========================ASTRAL run finished=======================")
 
 	if mapping:
@@ -38,8 +42,7 @@ def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 		return dendropy.Tree.get(data=r1[-1].strip(),schema='newick')
 
 
-	return dendropy.Tree.get(
-	    			file=open(out, "r"),
+	return dendropy.Tree.get(file=open(out, "r"),
 	     		schema='newick')
 
 def root_guide_tree(gene_trees, n, g, out, mapping,tree):
@@ -82,7 +85,7 @@ if "__main__" == __name__:
 	mapping = args["mapping"]
 	guide_tree = args["guide tree"]
 
-	if not os.path.exists(out_dir):
+	if not os.path.isdir(out_dir):
 		os.makedirs(out_dir)
 
 	with open(gene_trees_path) as f:
