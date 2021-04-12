@@ -11,10 +11,13 @@ import glob
 
 VERSION="v1.0.1"
 #__len__()
-def run_astral(gene_trees, n, g, out, mapping, guide_tree):
+def run_astral(gene_trees, n, g, out, mapping, guide_tree, astral_dir):
 
-	list_of_files = glob.glob('./Astral/astral.*.jar') # * means all if need specific format then *.csv
+
+	list_of_files = glob.glob(astral_dir + 'astral.*.jar') 
 	latest_file = max(list_of_files, key=os.path.getctime)
+
+
 
 	bashCommand = "java -Xmx"+ str(100 * ceil(log(n * g, 10)* log(n, 10)))+"m -jar "+ latest_file +" -i " + gene_trees + " -o "+ out + " -t 10"
 
@@ -23,6 +26,8 @@ def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 
 	if guide_tree:
 		bashCommand += " -q "+ guide_tree
+
+	
 
 	print("==========================Running " + bashCommand+"=========================")
 
@@ -45,7 +50,7 @@ def run_astral(gene_trees, n, g, out, mapping, guide_tree):
 	return dendropy.Tree.get(file=open(out, "r"),
 	     		schema='newick')
 
-def root_guide_tree(gene_trees, n, g, out, mapping,tree):
+def root_guide_tree(gene_trees, n, g, out, mapping,tree, astral_dir):
 	p_vals = [(float(l.label),l) for l in tree.postorder_internal_node_iter() if l.label and l.label != "NA"]
 	min_p = min(p_vals, key = lambda x: x[0])
 	print("Minimum p-value in the tree is " + str(min_p[0]))
@@ -55,7 +60,7 @@ def root_guide_tree(gene_trees, n, g, out, mapping,tree):
 	path = out+".rt"
 	tree.write(path=path,schema='newick')
 	print("The guide tree is successfully rerooted and written into "+ path)
-	gt = run_astral(gene_trees, n, g, out+"2", mapping, path)
+	gt = run_astral(gene_trees, n, g, out+"2", mapping, path, astral_dir)
 	return gt
 
 
@@ -71,6 +76,7 @@ if "__main__" == __name__:
 	parser.add_argument("-r","--rooted",required=False,action='store_true',help="Use this option if the guide tree is already rooted and does not need rerooting.")
 	parser.add_argument("-c","--cutoff",required=False,default = cutoff, help="The cutoff value for species delimitation, defalt is 0.05")
 	parser.add_argument("-e","--extended sp",required=False,action='store_true',help="If this option is set, the extended species tree will be outputed in the output directory with .ext.tre suffix")
+	parser.add_argument("-j","--astral directory",required=False,help="If Astral directory is not within the same path as this code, provide the path with this option")
 
 	
 	if len(argv) == 1:
@@ -97,11 +103,15 @@ if "__main__" == __name__:
 	trees.read(path=gene_trees_path, schema='newick')
 	n = taxa.__len__()
 	print(n)
-	tree = run_astral(gene_trees_path, n, len(lines), out_dir+"/astral.out", mapping ,guide_tree)
+	if not args["astral directory"]:
+		astral_dir = "./"
+	else:
+		astral_dir = args["astral directory"]
+	tree = run_astral(gene_trees_path, n, len(lines), out_dir+"/astral.out", mapping ,guide_tree, astral_dir)
 
 	print(tree.as_string(schema="newick"))
 	if not args["rooted"] or not args["guide tree"]:
-		tree = root_guide_tree(gene_trees_path, n, len(lines), out_dir+"/astral.out", None , tree)
+		tree = root_guide_tree(gene_trees_path, n, len(lines), out_dir+"/astral.out", None , tree, astral_dir)
 	
 	run_delimitation(tree, args["output file"], float(args["cutoff"]), args["extended sp"], out_dir)
 
