@@ -4,8 +4,7 @@ SODA is a tool for species delimitation using only gene tree topologies. It's a 
 
 - You can find the details of the algorithm and benchmarks in the following paper:
 
-	* Rabiee, Maryam, and Siavash Mirarab. “SODA: Multi-Locus Species Delimitation Using Quartet Frequencies.” BioRxiv, 2019, 869396. doi:10.1101/869396.
-
+	* Maryam Rabiee, Siavash Mirarab, SODA: multi-locus species delimitation using quartet frequencies, Bioinformatics, Volume 36, Issue 24, 15 December 2020, Pages 5623–5631, https://doi.org/10.1093/bioinformatics/btaa1010
 # INSTALLATION:
 
 ## Prerequisites
