@@ -14,6 +14,8 @@ VERSION="v1.0.1"
 def run_astral(gene_trees, n, g, out, mapping, guide_tree, astral_dir):
 
 
+	if astral_dir == "./":
+		astral_dir = os.getcwd()+"Astral/"
 	list_of_files = glob.glob(astral_dir + 'astral.*.jar') 
 	latest_file = max(list_of_files, key=os.path.getctime)
 
