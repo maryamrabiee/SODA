@@ -18,7 +18,7 @@ SODA is a tool for species delimitation using only gene tree topologies. It's a 
 2. Unzip the package if you downloaded the zip file.
 3. `cd` into the directory where SODA code is placed. 
 
-There is installation is required for the current version of SODA. 
+No further installation step is required for the current version of SODA. 
 
 # EXECUTION:
 For running soda you need your gene trees in newick format in one file and your guide tree in another file. The guide tree is option. If you haven't obtained the guide tree, SODA uses ASTRAL to compute one.
