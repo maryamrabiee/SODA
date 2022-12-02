@@ -74,7 +74,8 @@ def find_clades(rt_node,cutoff):
 					node.mark = 'T'
 
 		# print_node(node)
-					
+	if not clades:
+		add_clade(clades, rt_node)	
 	return clades
 
 
@@ -84,7 +85,7 @@ def print_extended_sp(tree, output_extended, out_dir):
 		if node.mark != 'T' and node.edge.is_internal():
 			node.edge.collapse()
 		#	print("collapse")
-	print(tre.as_string(schema="newick"))
+	print("Extenxed species tree: \n" + tre.as_string(schema="newick"))
 	if output_extended:
 		f = open(out_dir+"/astral.ext.tre", "w")
 		f.write(tre.as_string(schema="newick"))
@@ -105,6 +106,7 @@ def run_delimitation(tree, out, cutoff, output_extended, out_dir):
 		i.mark = 'F'
 
 	clades = find_clades(tree, cutoff)
+	#print("Clades:\n"+"\n  ".join(clades))
 	print_extended_sp(tree, output_extended, out_dir)
 
 	f = open(out, "w")	

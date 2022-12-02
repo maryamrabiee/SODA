@@ -9,7 +9,7 @@ import re
 import os
 import glob
 
-VERSION="v1.0.1"
+VERSION="v1.0.2"
 #__len__()
 def run_astral(gene_trees, n, g, out, mapping, guide_tree, astral_dir):
 
